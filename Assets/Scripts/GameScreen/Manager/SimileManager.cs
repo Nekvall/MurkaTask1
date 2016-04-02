@@ -6,8 +6,9 @@ public class SimileManager : MonoBehaviour
 {
     private List<GameObject> checkPoint;
     private int checkPointComplete;
-    private float distanceToPoint = 0.1f;           // растояние к чек-поинту.
-    private List<GameObject> checkPointQueue;       // очередь пройденных чек-поинтов.
+    private float distanceToPoint = 0.05f;                  // расстояние к чекпоинту, на котором линия должна пройти, что бы защитаться.
+    private float offsetBetweenLengthFigure = 0.5f;         // допустимая разница длинны, между нарисованой и заданой формой.
+    private List<GameObject> checkPointQueue;               // очередь пройденных чек-поинтов.
 
     void Awake()
     {
@@ -23,6 +24,7 @@ public class SimileManager : MonoBehaviour
         GameObject child;
         int i;
         int j;
+        float distanceBetweenCheckPoint = 0;                     // растояние между чек-поинтами. 
 
         //--------------------------------------------------------------------
 		// Вытаскиваем из заданой фигуры все чек-поинты.
@@ -32,13 +34,25 @@ public class SimileManager : MonoBehaviour
             
             if (child.tag == "checkPoint")
             {
+                if (checkPoint.Count > 0)
+                {
+                    distanceBetweenCheckPoint += Vector2.Distance(checkPoint[checkPoint.Count-1].transform.position, child.transform.position);
+                }
+
                 checkPoint.Add(child);
+            }
+
+            // Соеденяем последний и первый чек-поинт.
+            if (i == taskFigure.transform.childCount - 1)
+            {
+                distanceBetweenCheckPoint += Vector2.Distance(checkPoint[0].transform.position, checkPoint[checkPoint.Count-1].transform.position);
             }
         }
         //--------------------------------------------------------------------
 
-        Vector3 linePointPos = new Vector3();   // позиция точки линии.
-        Vector3 checkPointPos = new Vector3();  // позиция чек-поинта.
+        Vector3 linePointPos = new Vector3();       // позиция точки линии.
+        Vector3 checkPointPos = new Vector3();      // позиция чек-поинта.
+        float distanceLine = 0;                     // длинная линии нарисованой игроком.
         float distanceAB;
 
         //--------------------------------------------------------------------
@@ -46,6 +60,11 @@ public class SimileManager : MonoBehaviour
         for (i = 0; i < paintedFigure.Count; i++)
         {
             linePointPos = paintedFigure[i];
+
+            if (i > 0)
+            {
+                distanceLine += Vector3.Distance(paintedFigure[i - 1], paintedFigure[i]);
+            }
 
             for (j = 0; j < checkPoint.Count; j++)
             {
@@ -100,13 +119,35 @@ public class SimileManager : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("Очередь не верная ? = " + checkPointQueueFalse);
-
         //-------------------------------------------------------------------
 
-            
+        if (checkPointQueueFalse)
+        {
+            // Очередь не верная.
+            Debug.Log("Очередь не верная. СТОП!!!");
+            return;
+        }
+
+        //------------------------------------------------------------------
+        // Проверяем длинну нарисованой игроком линии и длинну заданой фигуры.
+        Debug.Log("L = " + distanceLine + "    " + distanceBetweenCheckPoint);
+        distanceAB = Mathf.Abs(distanceBetweenCheckPoint - distanceLine);
+        if (distanceAB > offsetBetweenLengthFigure)
+        {
+            Debug.Log("Длинна нарисованой линии слишком большая. СТОП!!!");
+            return;
+        }
+        //------------------------------------------------------------------
+
+
+        Debug.Log("Фигура совпала =)");
+
+        dispose();
     }
 
-
+    private void dispose()
+    {
+        checkPoint.Clear();
+        checkPointQueue.Clear();
+    }
 }
