@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Менеджер, который отрисовывает фигуру, котору в настоящее время рисует игрок.
+/// Менеджер, который отрисовывает фигуру, которую в настоящее время рисует игрок.
 /// </summary>
 public class DrawManager : MonoBehaviour 
-{
+{   
     private bool _drawLine;
     private List<Vector3> _pointsList;
     
@@ -56,5 +56,11 @@ public class DrawManager : MonoBehaviour
     public void stopDraw()
     {
         _drawLine = false;
+        GetComponent<Game>().simileFigure();
+    }
+
+    public List<Vector3> pointsList
+    {
+        get { return _pointsList; }
     }
 }

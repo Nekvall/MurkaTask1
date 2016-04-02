@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// Обработчик событий взаимодействия игрока с игрой.
+/// Обработчик событий.
 /// </summary>
 public class EventManager : MonoBehaviour 
 {

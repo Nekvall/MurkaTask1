@@ -3,12 +3,15 @@ using System.Collections;
 
 public class Game : MonoBehaviour 
 {
+    public static event EventManager.MethodContainer mouseButtonDownEvent;      // Игрок нажал левую кнопку мыши.
+
 	private LevelBase _level;	//текущий левел
     private int numCurrLevel;
 
     private LevelManager    _levelManager;
-    private DrawManager     _drawManager;
-    private FigureManager   _figureManager;
+    private DrawManager     _drawManager;       // менеджер отрисовки.
+    private FigureManager   _figureManager;     
+    private SimileManager   _simileManager;     // менеджер сравнения фигур.
     
 	void Start () 
 	{
@@ -27,6 +30,7 @@ public class Game : MonoBehaviour
         _levelManager   = GetComponent<LevelManager>();
         _drawManager    = GetComponent<DrawManager>();
         _figureManager  = GetComponent<FigureManager>();
+        _simileManager  = GetComponent<SimileManager>();
 	}
 
     /// <summary>
@@ -41,6 +45,14 @@ public class Game : MonoBehaviour
 
         // менеджер отрисует фигуру на сцене.
         _figureManager.show(_level.numForm);
+    }
+
+    /// <summary>
+    /// Сравнить нарисованую игроком фигуру, с заданой фигурой. 
+    /// </summary>
+    public void simileFigure()
+    {
+        _simileManager.compare(_figureManager.currFigure, _drawManager.pointsList);
     }
 
 	void Update () 
