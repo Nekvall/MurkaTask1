@@ -19,12 +19,13 @@ public class SimileManager : MonoBehaviour
     /// <summary>
     /// Сравнить фигуры.
     /// </summary>
-    public void compare(GameObject taskFigure, List<Vector3> paintedFigure)
+    public bool compare(GameObject taskFigure, List<Vector3> paintedFigure)
     {
         GameObject child;
         int i;
         int j;
-        float distanceBetweenCheckPoint = 0;                     // растояние между чек-поинтами. 
+        float distanceBetweenCheckPoint = 0;                // растояние между чек-поинтами. 
+        int checkPointLength;                               // количество чек-поинтов в фигуре.
 
         //--------------------------------------------------------------------
 		// Вытаскиваем из заданой фигуры все чек-поинты.
@@ -48,6 +49,8 @@ public class SimileManager : MonoBehaviour
                 distanceBetweenCheckPoint += Vector2.Distance(checkPoint[0].transform.position, checkPoint[checkPoint.Count-1].transform.position);
             }
         }
+
+        checkPointLength = checkPoint.Count;
         //--------------------------------------------------------------------
 
         Vector3 linePointPos = new Vector3();       // позиция точки линии.
@@ -82,6 +85,12 @@ public class SimileManager : MonoBehaviour
         }
         //--------------------------------------------------------------------
 
+        // Проверяем, если количество чек-поинтов не сходится с пройденым количеством чек-поинтов, то фигура не дорисована.
+        if (checkPointLength != checkPointQueue.Count)
+        {
+            Debug.Log("Игрок прошел не все чек-поинты. СТОП!!!");
+            return false;
+        }
 
         int currPoint = 0;
         int prewPoint = 0;
@@ -124,8 +133,12 @@ public class SimileManager : MonoBehaviour
         if (checkPointQueueFalse)
         {
             // Очередь не верная.
-            Debug.Log("Очередь не верная. СТОП!!!");
-            return;
+            Debug.Log("Очередь не верная. СТОП!!! ");
+            for(i = 0; i < checkPointQueue.Count; i++)
+            {
+                Debug.Log(checkPointQueue[i]);
+            }
+            return false;
         }
 
         //------------------------------------------------------------------
@@ -135,19 +148,18 @@ public class SimileManager : MonoBehaviour
         if (distanceAB > offsetBetweenLengthFigure)
         {
             Debug.Log("Длинна нарисованой линии слишком большая. СТОП!!!");
-            return;
+            return false;
         }
         //------------------------------------------------------------------
 
-
         Debug.Log("Фигура совпала =)");
-
-        dispose();
+        
+        return true;
     }
 
-    private void dispose()
+    public void clean()
     {
-        checkPoint.Clear();
-        checkPointQueue.Clear();
+        checkPoint.RemoveRange(0, checkPoint.Count);
+        checkPointQueue.RemoveRange(0, checkPointQueue.Count);
     }
 }

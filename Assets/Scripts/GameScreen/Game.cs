@@ -52,11 +52,23 @@ public class Game : MonoBehaviour
     /// </summary>
     public void simileFigure()
     {
-        _simileManager.compare(_figureManager.currFigure, _drawManager.pointsList);
+        bool simile = _simileManager.compare(_figureManager.currFigure, _drawManager.pointsList);
+
+        if (simile)
+        {
+            winLevel();
+        }
+
+        _drawManager.clean();
+        _simileManager.clean();
     }
 
-	void Update () 
-	{
-	    
-	}
+    /// <summary>
+    /// Выиграш уровня.
+    /// </summary>
+    private void winLevel()
+    {
+        //createNextLevel();
+    }
+
 }

@@ -19,8 +19,10 @@ public class DrawManager : MonoBehaviour
         _pointsList = new List<Vector3>();
         _line = gameObject.AddComponent<LineRenderer>();
         _line.SetVertexCount(0);
-        _line.SetWidth(0.2f, 0.2f);
-        _line.SetColors(Color.green, Color.green);
+        _line.SetWidth(0.1f, 0.1f);
+        _line.material = new Material(Shader.Find("Particles/Additive"));
+        _line.SetColors(Color.white, Color.white);
+        
         _line.useWorldSpace = true;
 	}
 	
@@ -69,11 +71,7 @@ public class DrawManager : MonoBehaviour
     public void startDraw()
     {
         _drawLine = true;
-
-        if (_pointsList != null)
-        {
-            _pointsList.Clear();
-        }
+        clean();
     }
 
     /// <summary>
@@ -92,5 +90,17 @@ public class DrawManager : MonoBehaviour
     public List<Vector3> pointsList
     {
         get { return _pointsList; }
+    }
+
+    /// <summary>
+    /// Очистить что нарисовал игрок.
+    /// </summary>
+    public void clean()
+    {
+        if (_pointsList != null)
+        {
+            _pointsList.Clear();
+            _line.SetVertexCount(0);
+        }
     }
 }
