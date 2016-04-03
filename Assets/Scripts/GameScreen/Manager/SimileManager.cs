@@ -130,7 +130,7 @@ public class SimileManager : MonoBehaviour
 
         //------------------------------------------------------------------
         // Проверяем длинну нарисованой игроком линии и длинну заданой фигуры.
-        Debug.Log("L = " + distanceLine + "    " + distanceBetweenCheckPoint);
+        //Debug.Log("L = " + distanceLine + "    " + distanceBetweenCheckPoint);
         distanceAB = Mathf.Abs(distanceBetweenCheckPoint - distanceLine);
         if (distanceAB > offsetBetweenLengthFigure)
         {
