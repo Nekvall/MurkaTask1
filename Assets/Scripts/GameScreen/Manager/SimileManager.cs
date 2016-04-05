@@ -6,9 +6,9 @@ public class SimileManager : MonoBehaviour
 {
     private List<GameObject> checkPoint;
     private int checkPointComplete;
-    private float distanceToPoint = 0.05f;                  // расстояние к чекпоинту, на котором линия должна пройти, что бы защитаться.
-    private float offsetBetweenLengthFigure = 0.5f;         // допустимая разница длинны, между нарисованой и заданой формой.
-    private List<GameObject> checkPointQueue;               // очередь пройденных чек-поинтов.
+    private float distanceToPoint = 0.06f;  //0.05                  // расстояние к чекпоинту, на котором линия должна пройти, что бы защитаться.
+    private float offsetBetweenLengthFigure = 0.6f;     //0.5       // допустимая разница длинны, между нарисованой и заданой формой.
+    private List<GameObject> checkPointQueue;                       // очередь пройденных чек-поинтов.
 
     void Awake()
     {

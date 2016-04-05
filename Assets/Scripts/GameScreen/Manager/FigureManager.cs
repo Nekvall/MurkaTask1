@@ -31,6 +31,11 @@ public class FigureManager : MonoBehaviour
         _currFigure = Instantiate(createFigure);
     }
 
+    public void destroyCurrFigure()
+    {
+        Destroy(_currFigure);
+    }
+
     public GameObject currFigure
     {
         get { return _currFigure; }

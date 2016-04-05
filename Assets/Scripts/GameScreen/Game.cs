@@ -3,22 +3,30 @@ using System.Collections;
 
 public class Game : MonoBehaviour 
 {
+    public GameObject timeLineObject;
+
     public static event EventManager.MethodContainer mouseButtonDownEvent;      // Игрок нажал левую кнопку мыши.
 
 	private LevelBase _level;	//текущий левел
     private int numCurrLevel;
 
-    private LevelManager    _levelManager;
-    private DrawManager     _drawManager;       // менеджер отрисовки.
-    private FigureManager   _figureManager;     
-    private SimileManager   _simileManager;     // менеджер сравнения фигур.
-    
+    private LevelManager        _levelManager;
+    private DrawManager         _drawManager;       // менеджер отрисовки.
+    private FigureManager       _figureManager;     
+    private SimileManager       _simileManager;     // менеджер сравнения фигур.
+    private TimeLevelManager    _timeLevelManager; // менеджер времени уровня.
+
+    private const int _startHard = 0;           // стартовая сложность уровня.
+    private const int _hardOffset = 50;         // увелечение сложности для следующего уровня. 
+    private int _currLevelTime;
+
 	void Start () 
 	{
         initialize();
 
 		numCurrLevel = 0;
 
+        _currLevelTime = _startHard;
         createNextLevel();
 	}
 
@@ -27,10 +35,11 @@ public class Game : MonoBehaviour
     /// </summary>
 	private void initialize()
 	{
-        _levelManager   = GetComponent<LevelManager>();
-        _drawManager    = GetComponent<DrawManager>();
-        _figureManager  = GetComponent<FigureManager>();
-        _simileManager  = GetComponent<SimileManager>();
+        _levelManager       = GetComponent<LevelManager>();
+        _drawManager        = GetComponent<DrawManager>();
+        _figureManager      = GetComponent<FigureManager>();
+        _simileManager      = GetComponent<SimileManager>();
+        _timeLevelManager   = timeLineObject.GetComponent<TimeLevelManager>();
 	}
 
     /// <summary>
@@ -45,6 +54,15 @@ public class Game : MonoBehaviour
 
         // менеджер отрисует фигуру на сцене.
         _figureManager.show(_level.numForm);
+
+        // усложняем уровень.
+        _currLevelTime += _hardOffset;
+        if (_currLevelTime < 0)
+        {
+            _currLevelTime = 0;
+        }
+
+        _timeLevelManager.setTime(_currLevelTime);
     }
 
     /// <summary>
@@ -56,7 +74,8 @@ public class Game : MonoBehaviour
 
         if (simile)
         {
-            winLevel();
+            _figureManager.destroyCurrFigure();
+            createNextLevel();
         }
 
         _drawManager.clean();
@@ -64,11 +83,11 @@ public class Game : MonoBehaviour
     }
 
     /// <summary>
-    /// Выиграш уровня.
+    /// Время уровня закончилось.
     /// </summary>
-    private void winLevel()
+    public void timeLevelEnded()
     {
-        //createNextLevel();
+        _drawManager.isCanDraw = false;
+        _drawManager.clean();
     }
-
 }

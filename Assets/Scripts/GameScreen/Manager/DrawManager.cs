@@ -13,6 +13,8 @@ public class DrawManager : MonoBehaviour
     private LineRenderer _line;
     private Vector3 mousePos;
 
+    private bool _isCanDraw;             // можно рисовать?
+
     void Awake() 
 	{
         _drawLine = false;
@@ -22,8 +24,8 @@ public class DrawManager : MonoBehaviour
         _line.SetWidth(0.1f, 0.1f);
         _line.material = new Material(Shader.Find("Particles/Additive"));
         _line.SetColors(Color.white, Color.white);
-        
         _line.useWorldSpace = true;
+        _isCanDraw = true;
 	}
 	
 	void Update () 
@@ -70,8 +72,12 @@ public class DrawManager : MonoBehaviour
     /// </summary>
     public void startDraw()
     {
-        _drawLine = true;
+        if (!isCanDraw){
+            return;
+        }
+
         clean();
+        _drawLine = true;
     }
 
     /// <summary>
@@ -92,11 +98,18 @@ public class DrawManager : MonoBehaviour
         get { return _pointsList; }
     }
 
+    public bool isCanDraw
+    {
+        get { return _isCanDraw; }
+        set { _isCanDraw = value; }
+    }
+
     /// <summary>
     /// Очистить что нарисовал игрок.
     /// </summary>
     public void clean()
     {
+        _drawLine = false;
         if (_pointsList != null)
         {
             _pointsList.Clear();

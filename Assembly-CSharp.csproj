@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\GameScreen\Manager\InputManager.cs" />
      <Compile Include="Assets\Scripts\GameScreen\Manager\LevelManager.cs" />
      <Compile Include="Assets\Scripts\GameScreen\Manager\SimileManager.cs" />
+     <Compile Include="Assets\Scripts\GameScreen\Manager\TimeLevelManager.cs" />
      <Compile Include="Assets\Scripts\StartScreen\StartScreen.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
