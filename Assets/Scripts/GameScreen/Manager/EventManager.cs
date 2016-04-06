@@ -18,4 +18,10 @@ public class EventManager : MonoBehaviour
         InputManager.mouseButtonDownEvent   += _drawManager.startDraw;
         InputManager.mouseButtonUpEvent     += _drawManager.stopDraw;
     }
+
+	public void removeEvent()
+	{
+		InputManager.mouseButtonDownEvent   -= _drawManager.startDraw;
+		InputManager.mouseButtonUpEvent     -= _drawManager.stopDraw;
+	}
 }

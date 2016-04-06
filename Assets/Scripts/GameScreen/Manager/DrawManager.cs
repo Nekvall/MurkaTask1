@@ -6,16 +6,14 @@ using System.Collections.Generic;
 /// Менеджер, который отрисовывает фигуру, которую в настоящее время рисует игрок.
 /// </summary>
 public class DrawManager : MonoBehaviour 
-{   
+{
     private bool _drawLine;
     private List<Vector3> _pointsList;
     
     private LineRenderer _line;
     private Vector3 mousePos;
 
-    private bool _isCanDraw;             // можно рисовать?
-
-    void Awake() 
+    void Start() 
 	{
         _drawLine = false;
         _pointsList = new List<Vector3>();
@@ -25,14 +23,13 @@ public class DrawManager : MonoBehaviour
         _line.material = new Material(Shader.Find("Particles/Additive"));
         _line.SetColors(Color.white, Color.white);
         _line.useWorldSpace = true;
-        _isCanDraw = true;
-	}
+  	}
 	
 	void Update () 
 	{
         if (!_drawLine) return;
- 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);         // позиция мышки.
         mousePos.z = 0;
         
         _pointsList.Add(mousePos);
@@ -72,10 +69,6 @@ public class DrawManager : MonoBehaviour
     /// </summary>
     public void startDraw()
     {
-        if (!isCanDraw){
-            return;
-        }
-
         clean();
         _drawLine = true;
     }
@@ -98,12 +91,6 @@ public class DrawManager : MonoBehaviour
         get { return _pointsList; }
     }
 
-    public bool isCanDraw
-    {
-        get { return _isCanDraw; }
-        set { _isCanDraw = value; }
-    }
-
     /// <summary>
     /// Очистить что нарисовал игрок.
     /// </summary>
@@ -112,8 +99,14 @@ public class DrawManager : MonoBehaviour
         _drawLine = false;
         if (_pointsList != null)
         {
-            _pointsList.Clear();
+			_pointsList.RemoveRange (0, _pointsList.Count);
             _line.SetVertexCount(0);
         }
     }
+
+	public void destroy()
+	{
+		clean ();
+		Destroy (_line);
+	}
 }
