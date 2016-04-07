@@ -9,6 +9,7 @@ public class FigureManager : MonoBehaviour
     public GameObject figure1;
     public GameObject figure2;
     public GameObject figure3;
+    public GameObject figure4;
 
     private GameObject _currFigure;
 
@@ -24,6 +25,7 @@ public class FigureManager : MonoBehaviour
             case 1: createFigure = figure1; break;
             case 2: createFigure = figure2; break;
             case 3: createFigure = figure3; break;
+            case 4: createFigure = figure4; break;
 
             default: createFigure = figure1; break;
         }

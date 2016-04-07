@@ -13,6 +13,10 @@ public class DrawManager : MonoBehaviour
     private LineRenderer _line;
     private Vector3 mousePos;
 
+    // traceParticale.
+    public GameObject traceParticale;
+    private float maxLengthForOneTraceParticale = 0.05f;     // максимальная длинна для 1-го партикала.
+ 
     void Start() 
 	{
         _drawLine = false;
@@ -24,7 +28,7 @@ public class DrawManager : MonoBehaviour
         _line.SetColors(Color.white, Color.white);
         _line.useWorldSpace = true;
   	}
-	
+    
 	void Update () 
 	{
         if (!_drawLine) return;
@@ -36,12 +40,43 @@ public class DrawManager : MonoBehaviour
 
         _line.SetVertexCount(_pointsList.Count);
         _line.SetPosition(_pointsList.Count - 1, (Vector3)_pointsList[_pointsList.Count - 1]);
-
+        
         if (checkLineOnCollideStartFinish())
         {
             // Остановить рисование фигуры.
             stopDraw();
         }
+
+
+        // отрисовываем trace.
+        if (_pointsList.Count > 1)
+        {
+            float lengthAB = Vector3.Distance((Vector3)_pointsList[_pointsList.Count - 2], (Vector3)_pointsList[_pointsList.Count - 1]);
+
+            if (lengthAB > maxLengthForOneTraceParticale)
+            {
+                Vector3 A = (Vector3)_pointsList[_pointsList.Count - 2];
+                Vector3 B = (Vector3)_pointsList[_pointsList.Count - 1];
+                Vector3 AB = new Vector3(A.x - B.x, A.y - B.y);
+                
+                Vector3 pos;
+                
+                for (int i = 0; i < (int)(lengthAB / maxLengthForOneTraceParticale); i++)
+                {
+                    Vector3 normVectAB = AB.normalized;
+                    normVectAB.Scale(new Vector3(maxLengthForOneTraceParticale * i, maxLengthForOneTraceParticale * i, 0));
+                    pos = new Vector3(mousePos.x + normVectAB.x, mousePos.y + normVectAB.y, 0);
+                    
+                    Instantiate(traceParticale, pos, Quaternion.identity);
+                }
+            }
+            else
+            {
+                Instantiate(traceParticale, mousePos, Quaternion.identity);
+            }
+        } 
+
+
 	}
 
     /// <summary>
